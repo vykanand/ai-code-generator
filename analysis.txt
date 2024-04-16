@@ -1,0 +1,57 @@
+**1. Main purpose of the project**
+
+The main purpose of this project is to demonstrate a full-stack application structure with Node.js, Express, MongoDB, and Mocha. It includes routes, services, models, tests, and a package.json file.
+
+**2. Number of routes defined**
+
+There are 3 routes defined in the routes directory:
+
+- `/` - the root route
+- `/users` - the route for interacting with users
+- `/tasks` - the route for interacting with tasks
+
+**3. Database used and how it is connected**
+
+The project uses MongoDB as the database. The connection is established in the `models/index.js` file using the `mongoose` library.
+
+**4. Main dependencies used**
+
+The main dependencies used in the project are:
+
+- `express` - the web framework
+- `mongodb` - the MongoDB driver
+- `mongoose` - the MongoDB object modeling library
+- `mocha` - the test framework
+
+**5. Error handling**
+
+Errors are handled using the `error middleware` in `app.js`. This middleware catches all errors thrown by the application and sends a response to the client with the appropriate error message.
+
+**6. Best practices followed**
+
+The project follows some of the best practices, including:
+
+- **Separation of concerns** - the project is divided into different directories for routes, services, models, and tests
+- **Use of a database** - the project uses MongoDB to store and retrieve data
+- **Error handling** - the project uses an error middleware to handle errors thrown by the application
+- **Testing** - the project includes test files to ensure that the code is working as expected
+
+**7. Code structure and modularization**
+
+The code is structured and modularized into different directories and files. The `routes` directory contains the routes, the `services` directory contains the services, the `models` directory contains the models, and the `tests` directory contains the tests.
+
+**8. Test files included and coverage**
+
+The project includes test files for the routes, services, and models. The test coverage is not 100%, but it covers most of the important functionality.
+
+**9. Security handling**
+
+The project does not include any specific security measures. This is something that should be addressed in a real-world application.
+
+**10. Improvements to the codebase**
+
+Some improvements that could be made to the codebase include:
+
+- **Improving the error handling** - the error middleware could be improved to provide more detailed error messages
+- **Adding more tests** - the test coverage could be improved by adding more tests
+- **Improving the security** - the application should include some security measures to protect against attacks

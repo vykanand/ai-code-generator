@@ -1,0 +1,15 @@
+{
+  "name": "nodejs-example",
+  "version": "1.0.0",
+  "description": "A simple Node.js project with an Express server.",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "mocha test/index.test.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "supertest": "^6.3.6"
+  }
+}

@@ -1,0 +1,830 @@
+```ts  
+├── package.json
+└── src
+    └── server.js  
+```
+
+**package.json**
+```json  
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}  
+```
+
+**src/server.js**
+```js  
+const express = require('express');
+const app = express();
+const port = 5254;
+
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
+});  
+```
+```ts  
+├── models
+    ├── Friend.js
+    ├── Review.js
+    ├── Post.js
+    ├── Like.js
+    ├── Order.js
+    └── Product.js  
+```
+
+**models/Friend.js**
+```js  
+const mongoose = require('mongoose');
+
+const FriendSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  age: {
+    type: Number,
+    required: true
+  }
+});
+
+const Friend = mongoose.model('Friend', FriendSchema);
+
+module.exports = Friend;  
+```
+
+**models/Review.js**
+```js  
+const mongoose = require('mongoose');
+
+const ReviewSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true
+  },
+  body: {
+    type: String,
+    required: true
+  },
+  rating: {
+    type: Number,
+    required: true
+  }
+});
+
+const Review = mongoose.model('Review', ReviewSchema);
+
+module.exports = Review;  
+```
+
+**models/Post.js**
+```js  
+const mongoose = require('mongoose');
+
+const PostSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true
+  },
+  body: {
+    type: String,
+    required: true
+  }
+});
+
+const Post = mongoose.model('Post', PostSchema);
+
+module.exports = Post;  
+```
+
+**models/Like.js**
+```js  
+const mongoose = require('mongoose');
+
+const LikeSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  postId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Post',
+    required: true
+  }
+});
+
+const Like = mongoose.model('Like', LikeSchema);
+
+module.exports = Like;  
+```
+
+**models/Order.js**
+```js  
+const mongoose = require('mongoose');
+
+const OrderSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  productId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product',
+    required: true
+  },
+  quantity: {
+    type: Number,
+    required: true
+  }
+});
+
+const Order = mongoose.model('Order', OrderSchema);
+
+module.exports = Order;  
+```
+
+**models/Product.js**
+```js  
+const mongoose = require('mongoose');
+
+const ProductSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
+  }
+});
+
+const Product = mongoose.model('Product', ProductSchema);
+
+module.exports = Product;  
+```
+```ts  
+├── services
+    ├── FriendService.js
+    ├── ReviewService.js
+    ├── PostService.js
+    ├── LikeService.js
+    ├── OrderService.js
+    └── ProductService.js  
+```
+
+**services/FriendService.js**
+```js  
+const Friend = require('../models/Friend');
+
+class FriendService {
+  async createFriend(friend) {
+    const newFriend = new Friend(friend);
+    await newFriend.save();
+    return newFriend;
+  }
+
+  async getFriends() {
+    const friends = await Friend.find();
+    return friends;
+  }
+
+  async getFriendById(id) {
+    const friend = await Friend.findById(id);
+    return friend;
+  }
+
+  async updateFriend(id, friend) {
+    const updatedFriend = await Friend.findByIdAndUpdate(id, friend, { new: true });
+    return updatedFriend;
+  }
+
+  async deleteFriend(id) {
+    await Friend.findByIdAndDelete(id);
+  }
+}
+
+module.exports = FriendService;  
+```
+
+**services/ReviewService.js**
+```js  
+const Review = require('../models/Review');
+
+class ReviewService {
+  async createReview(review) {
+    const newReview = new Review(review);
+    await newReview.save();
+    return newReview;
+  }
+
+  async getReviews() {
+    const reviews = await Review.find();
+    return reviews;
+  }
+
+  async getReviewById(id) {
+    const review = await Review.findById(id);
+    return review;
+  }
+
+  async updateReview(id, review) {
+    const updatedReview = await Review.findByIdAndUpdate(id, review, { new: true });
+    return updatedReview;
+  }
+
+  async deleteReview(id) {
+    await Review.findByIdAndDelete(id);
+  }
+}
+
+module.exports = ReviewService;  
+```
+
+**services/PostService.js**
+```js  
+const Post = require('../models/Post');
+
+class PostService {
+  async createPost(post) {
+    const newPost = new Post(post);
+    await newPost.save();
+    return newPost;
+  }
+
+  async getPosts() {
+    const posts = await Post.find();
+    return posts;
+  }
+
+  async getPostById(id) {
+    const post = await Post.findById(id);
+    return post;
+  }
+
+  async updatePost(id, post) {
+    const updatedPost = await Post.findByIdAndUpdate(id, post, { new: true });
+    return updatedPost;
+  }
+
+  async deletePost(id) {
+    await Post.findByIdAndDelete(id);
+  }
+}
+
+module.exports = PostService;  
+```
+
+**services/LikeService.js**
+```js  
+const Like = require('../models/Like');
+
+class LikeService {
+  async createLike(like) {
+    const newLike = new Like(like);
+    await newLike.save();
+    return newLike;
+  }
+
+  async getLikes() {
+    const likes = await Like.find();
+    return likes;
+  }
+
+  async getLikeById(id) {
+    const like = await Like.findById(id);
+    return like;
+  }
+
+  async updateLike(id, like) {
+    const updatedLike = await Like.findByIdAndUpdate(id, like, { new: true });
+    return updatedLike;
+  }
+
+  async deleteLike(id) {
+    await Like.findByIdAndDelete(id);
+  }
+}
+
+module.exports = LikeService;  
+```
+
+**services/OrderService.js**
+```js  
+const Order = require('../models/Order');
+
+class OrderService {
+  async createOrder(order) {
+    const newOrder = new Order(order);
+    await newOrder.save();
+    return newOrder;
+  }
+
+  async getOrders() {
+    const orders = await Order.find();
+    return orders;
+  }
+
+  async getOrderById(id) {
+    const order = await Order.findById(id);
+    return order;
+  }
+
+  async updateOrder(id, order) {
+    const updatedOrder = await Order.findByIdAndUpdate(id, order, { new: true });
+    return updatedOrder;
+  }
+
+  async deleteOrder(id) {
+    await Order.findByIdAndDelete(id);
+  }
+}
+
+module.exports = OrderService;  
+```
+
+**services/ProductService.js**
+```js  
+const Product = require('../models/Product');
+
+class ProductService {
+  async createProduct(product) {
+    const newProduct = new Product(product);
+    await newProduct.save();
+    return newProduct;
+  }
+
+  async getProducts() {
+    const products = await Product.find();
+    return products;
+  }
+
+  async getProductById(id) {
+    const product = await Product.findById(id);
+    return product;
+  }
+
+  async updateProduct(id, product) {
+    const updatedProduct = await Product.findByIdAndUpdate(id, product, { new: true });
+    return updatedProduct;
+  }
+
+  async deleteProduct(id) {
+    await Product.findByIdAndDelete(id);
+  }
+}
+
+module.exports = ProductService;  
+```
+```ts  
+├── routes
+    ├── friend.routes.js
+    ├── review.routes.js
+    ├── post.routes.js
+    ├── like.routes.js
+    ├── order.routes.js
+    └── product.routes.js  
+```
+
+**routes/friend.routes.js**
+```js  
+const express = require('express');
+const router = express.Router();
+const FriendService = require('../services/FriendService');
+
+router.post('/', async (req, res) => {
+  const friend = await FriendService.createFriend(req.body);
+  res.json(friend);
+});
+
+router.get('/', async (req, res) => {
+  const friends = await FriendService.getFriends();
+  res.json(friends);
+});
+
+router.get('/:id', async (req, res) => {
+  const friend = await FriendService.getFriendById(req.params.id);
+  res.json(friend);
+});
+
+router.put('/:id', async (req, res) => {
+  const friend = await FriendService.updateFriend(req.params.id, req.body);
+  res.json(friend);
+});
+
+router.delete('/:id', async (req, res) => {
+  await FriendService.deleteFriend(req.params.id);
+  res.json({ message: 'Friend deleted successfully' });
+});
+
+module.exports = router;  
+```
+
+**routes/review.routes.js**
+```js  
+const express = require('express');
+const router = express.Router();
+const ReviewService = require('../services/ReviewService');
+
+router.post('/', async (req, res) => {
+  const review = await ReviewService.createReview(req.body);
+  res.json(review);
+});
+
+router.get('/', async (req, res) => {
+  const reviews = await ReviewService.getReviews();
+  res.json(reviews);
+});
+
+router.get('/:id', async (req, res) => {
+  const review = await ReviewService.getReviewById(req.params.id);
+  res.json(review);
+});
+
+router.put('/:id', async (req, res) => {
+  const review = await ReviewService.updateReview(req.params.id, req.body);
+  res.json(review);
+});
+
+router.delete('/:id', async (req, res) => {
+  await ReviewService.deleteReview(req.params.id);
+  res.json({ message: 'Review deleted successfully' });
+});
+
+module.exports = router;  
+```
+
+**routes/post.routes.js**
+```js  
+const express = require('express');
+const router = express.Router();
+const PostService = require('../services/PostService');
+
+router.post('/', async (req, res) => {
+  const post = await PostService.createPost(req.body);
+  res.json(post);
+});
+
+router.get('/', async (req, res) => {
+  const posts = await PostService.getPosts();
+  res.json(posts);
+});
+
+router.get('/:id', async (req, res) => {
+  const post = await PostService.getPostById(req.params.id);
+  res.json(post);
+});
+
+router.put('/:id', async (req, res) => {
+  const post = await PostService.updatePost(req.params.id, req.body);
+  res.json(post);
+});
+
+router.delete('/:id', async (req, res) => {
+  await PostService.deletePost(req.params.id);
+  res.json({ message: 'Post deleted successfully' });
+});
+
+module.exports = router;  
+```
+
+**routes/like.routes.js**
+```js  
+const express = require('express');
+const router = express.Router();
+const LikeService = require('../services/LikeService');
+
+router.post('/', async (req, res) => {
+  const like = await LikeService.createLike(req.body);
+  res.json(like);
+});
+
+router.get('/', async (req, res) => {
+  const likes = await LikeService.getLikes();
+  res.json(likes);
+});
+
+router.get('/:id', async (req, res) => {
+  const like = await LikeService.getLikeById(req.params.id);
+  res.json(like);
+});
+
+router.put('/:id', async (req, res) => {
+  const like = await LikeService.updateLike(req.params.id, req.body);
+  res.json(like);
+});
+
+router.delete('/:id', async (req, res) => {
+  await LikeService.deleteLike(req.params.id);
+  res.json({ message: 'Like deleted successfully' });
+});
+
+module.exports = router;  
+```
+
+**routes/order.routes.js**
+```js  
+const express = require('express');
+const router = express.Router();
+const OrderService = require('../services/OrderService');
+
+router.post('/', async (req, res) => {
+  const order = await OrderService.createOrder(req.body);
+  res.json(order);
+});
+
+router.get('/', async (req, res) => {
+  const orders = await OrderService.getOrders();
+  res.json(orders);
+});
+
+router.get('/:id', async (req, res) => {
+  const order = await OrderService.getOrderById(req.params.id);
+  res.json(order);
+});
+
+router.put('/:id', async (req, res) => {
+  const order = await OrderService.updateOrder(req.params.id, req.body);
+  res.json(order);
+});
+
+router.delete('/:id', async (req, res) => {
+  await OrderService.deleteOrder(req.params.id);
+  res.json({ message: 'Order deleted successfully' });
+});
+
+module.exports = router;  
+```
+
+**routes/product.routes.js**
+```js  
+const express = require('express');
+const router = express.Router();
+const ProductService = require('../services/ProductService');
+
+router.post('/', async (req, res) => {
+  const product = await ProductService.createProduct(req.body);
+  res.json(product);
+});
+
+router.get('/', async (req, res) => {
+  const products = await ProductService.getProducts();
+  res.json(products);
+});
+
+router.get('/:id', async (req, res) => {
+  const product = await ProductService.getProductById(req.params.id);
+  res.json(product);
+});
+
+router.put('/:id', async (req, res) => {
+  const product = await ProductService.updateProduct(req.params.id, req.body);
+  res.json(product);
+});
+
+router.delete('/:id', async (req, res) => {
+  await ProductService.deleteProduct(req.params.id);
+  res.json({ message: 'Product deleted successfully' });
+});
+
+module.exports = router;  
+```
+```ts  
+├── tests
+    ├── FriendService.test.js
+    ├── ReviewService.test.js
+    ├── PostService.test.js
+    ├── LikeService.test.js
+    ├── OrderService.test.js
+    └── ProductService.test.js  
+```
+
+**tests/FriendService.test.js**
+```js  
+const FriendService = require('../services/FriendService');
+const assert = require('assert');
+
+describe('FriendService', () => {
+  describe('createFriend', () => {
+    it('should create a new friend', async () => {
+      const friend = await FriendService.createFriend({ name: 'John Doe', age: 30 });
+      assert.ok(friend._id);
+      assert.strictEqual(friend.name, 'John Doe');
+      assert.strictEqual(friend.age, 30);
+    });
+  });
+
+  describe('getFriends', () => {
+    it('should get all friends', async () => {
+      const friends = await FriendService.getFriends();
+      assert.ok(friends.length > 0);
+    });
+  });
+
+  describe('getFriendById', () => {
+    it('should get a friend by id', async () => {
+      const friend = await FriendService.createFriend({ name: 'John Doe', age: 30 });
+      const foundFriend = await FriendService.getFriendById(friend._id);
+      assert.strictEqual(foundFriend.name, 'John Doe');
+      assert.strictEqual(foundFriend.age, 30);
+    });
+  });
+
+  describe('updateFriend', () => {
+    it('should update a friend', async () => {
+      const friend = await FriendService.createFriend({ name: 'John Doe', age: 30 });
+      const updatedFriend = await FriendService.updateFriend(friend._id, { name: 'Jane Doe', age: 31 });
+      assert.strictEqual(updatedFriend.name, 'Jane Doe');
+      assert.strictEqual(updatedFriend.age, 31);
+    });
+  });
+
+  describe('deleteFriend', () => {
+    it('should delete a friend', async () => {
+      const friend = await FriendService.createFriend({ name: 'John Doe', age: 30 });
+      await FriendService.deleteFriend(friend._id);
+      const foundFriend = await FriendService.getFriendById(friend._id);
+      assert.strictEqual(foundFriend, null);
+    });
+  });
+});  
+```
+
+**tests/ReviewService.test.js**
+```js  
+const ReviewService = require('../services/ReviewService');
+const assert = require('assert');
+
+describe('ReviewService', () => {
+  describe('createReview', () => {
+    it('should create a new review', async () => {
+      const review = await ReviewService.createReview({ title: 'Great product', body: 'I love this product!', rating: 5 });
+      assert.ok(review._id);
+      assert.strictEqual(review.title, 'Great product');
+      assert.strictEqual(review.body, 'I love this product!');
+      assert.strictEqual(review.rating, 5);
+    });
+  });
+
+  describe('getReviews', () => {
+    it('should get all reviews', async () => {
+      const reviews = await ReviewService.getReviews();
+      assert.ok(reviews.length > 0);
+    });
+  });
+
+  describe('getReviewById', () => {
+    it('should get a review by id', async () => {
+      const review = await ReviewService.createReview({ title: 'Great product', body: 'I love this product!', rating: 5 });
+      const foundReview = await ReviewService.getReviewById(review._id);
+      assert.strictEqual(foundReview.title, 'Great product');
+      assert.strictEqual(foundReview.body, 'I love this product!');
+      assert.strictEqual(foundReview.rating, 5);
+    });
+  });
+
+  describe('updateReview', () => {
+    it('should update a review', async () => {
+      const review = await ReviewService.createReview({ title: 'Great product', body: 'I love this product!', rating: 5 });
+      const updatedReview = await ReviewService.updateReview(review._id, { title: 'Good product', body: 'I like this product!', rating: 4 });
+      assert.strictEqual(updatedReview.title, 'Good product');
+      assert.strictEqual(updatedReview.body, 'I like this product!');
+      assert.strictEqual(updatedReview.rating, 4);
+    });
+  });
+
+  describe('deleteReview', () => {
+    it('should delete a review', async () => {
+      const review = await ReviewService.createReview({ title: 'Great product', body: 'I love this product!', rating: 5 });
+      await ReviewService.deleteReview(review._id);
+      const foundReview = await ReviewService.getReviewById(review._id);
+      assert.strictEqual(foundReview, null);
+    });
+  });
+});  
+```
+
+**tests/PostService.test.js**
+```js  
+const PostService = require('../services/PostService');
+const assert = require('assert');
+
+describe('PostService', () => {
+  describe('createPost', () => {
+    it('should create a new post', async () => {
+      const post = await PostService.createPost({ title: 'My first post', body: 'This is my first post on this platform!' });
+      assert.ok(post._id);
+      assert.strictEqual(post.title, 'My first post');
+      assert.strictEqual(post.body, 'This is my first post on this platform!');
+    });
+  });
+
+  describe('getPosts', () => {
+    it('should get all posts', async () => {
+      const posts = await PostService.getPosts();
+      assert.ok(posts.length > 0);
+    });
+  });
+
+  describe('getPostById', () => {
+    it('should get a post by id', async () => {
+      const post = await PostService.createPost({ title: 'My first post', body: 'This is my first post on this platform!' });
+      const foundPost = await PostService.getPostById(post._id);
+      assert.strictEqual(foundPost.title, 'My first post');
+      assert.strictEqual(foundPost.body, 'This is my first post on this platform!');
+    });
+  });
+
+  describe('updatePost', () => {
+    it('should update a post', async () => {
+      const post = await PostService.createPost({ title: 'My first post', body: 'This is my first post on this platform!' });
+      const updatedPost = await PostService.updatePost(post._id, { title: 'My updated post', body: 'This is my updated post!' });
+      assert.strictEqual(updatedPost.title, 'My updated post');
+      assert.strictEqual(updatedPost.body, 'This is my updated post!');
+    });
+  });
+
+  describe('deletePost', () => {
+    it('should delete a post', async () => {
+      const post = await PostService.createPost({ title: 'My first post', body: 'This is my first post on this platform!' });
+      await PostService.deletePost(post._id);
+      const foundPost = await PostService.getPostById(post._id);
+      assert.strictEqual(foundPost, null);
+    });
+  });
+});  
+```
+
+**tests/LikeService.test.js**
+```js  
+const LikeService = require('../services/LikeService');
+const assert = require('assert');
+
+describe('LikeService', () => {
+  describe('createLike', () => {
+    it('should create a new like', async () => {
+      const like = await LikeService.createLike({ userId: '12345', postId: '67890' });
+      assert.ok(like._id);
+      assert.strictEqual(like.userId, '12345');
+      assert.strictEqual(like.postId, '67890');
+    });
+```
+
+**src/app.js**
+```js  
+const express = require('express');
+const app = express();
+const port = 3000;
+const cors = require('cors');
+const helmet = require('helmet');
+
+app.use(cors());
+app.use(helmet());
+
+app.use(express.json());
+
+const friendRouter = require('./routes/friend.routes');
+const reviewRouter = require('./routes/review.routes');
+const postRouter = require('./routes/post.routes');
+const likeRouter = require('./routes/like.routes');
+const orderRouter = require('./routes/order.routes');
+const productRouter = require('./routes/product.routes');
+
+app.use('/api/friends', friendRouter);
+app.use('/api/reviews', reviewRouter);
+app.use('/api/posts', postRouter);
+app.use('/api/likes', likeRouter);
+app.use('/api/orders', orderRouter);
+app.use('/api/products', productRouter);
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
+});  
+```
+```json  
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "helmet": "^4.5.4",
+    "mongoose": "^6.3.1"
+  }
+}  
+```
