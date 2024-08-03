@@ -1,9 +1,0 @@
-app.js
-models/index.js
-node_modules/
-package-lock.json
-package.json
-routes/index.js
-services/index.js
-src/
-tests/index.js

@@ -1,6 +1,9 @@
 import { genAI } from "./utils/common.js";
 import fs from 'fs';
 import readline from 'readline';
+import { processText } from "./generate2.js";
+
+export const outputFolder = './output';
 
 async function run() {
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
@@ -26,7 +29,7 @@ async function run() {
             rl.close();
             break;
         }
-        let msgAppend = "Nodejs no explaination code generation with filename and path " + msg;
+        let msgAppend = "generate code with path " + msg;
         const result = await chat.sendMessage(msgAppend);
         const response = result.response;
         const text = await response.text();
@@ -35,6 +38,7 @@ async function run() {
 
         // Append the output to a text file
         fs.appendFileSync('chatoutput.txt', `${text}\n`);
+        await processText(text, outputFolder);
 
         // Continue the loop
     }

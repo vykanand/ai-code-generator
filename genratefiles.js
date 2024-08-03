@@ -2,19 +2,19 @@ import { writeFile } from "fs/promises";
 import fs from 'fs';
 import path from 'path';
 
-import { argv } from 'process';
+// import { argv } from 'process';
 
 // ...other imports 
 
 // Get textFilePath from args
-const textFilePath = argv[2];
+// const textFilePath = argv[2];
 
-if (!textFilePath) {
-    console.error('Please provide textFilePath as argument');
-    process.exit(1);
-}
+// if (!textFilePath) {
+//     console.error('Please provide textFilePath as argument');
+//     process.exit(1);
+// }
 
-// const textFilePath = 'chatoutput.txt'; // Change this to your text file path
+const textFilePath = 'chatoutput.txt'; // Change this to your text file path
 const outputFolder = './output'; // Change this to your desired output folder
 processTextFile(textFilePath, outputFolder)
 // Function to read the text file, extract files, and create folders and files
